@@ -11,7 +11,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final todos = [];
+  final List<Todo> todos = [];
 
   int get total {
     return todos.length;
@@ -55,7 +55,14 @@ class _MyAppState extends State<MyApp> {
                           onDismissed: (direction) => setState(() {
                                 todos.removeAt(index);
                               }),
-                          child: TodoItem(todo: todo));
+                          child: TodoItem(
+                            todo: todo,
+                            onToggle: () {
+                              setState(() {
+                                todos[index].done = !todos[index].done;
+                              });
+                            },
+                          ));
                     }))
           ],
         ),

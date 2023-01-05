@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:todo_with_tdd/todo_item.dart';
 
-class Todo {
-  final String description;
-  final bool done;
+import 'todo.model.dart';
 
-  Todo({required this.description, this.done = false});
-}
-
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
 
-  final todos = [
-    Todo(description: "Criar testes de undiade"),
-    Todo(description: "Criar testes de integração"),
-    Todo(description: "Criar testes de widget", done: true),
-  ];
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
-  int getTotal() {
+class _MyAppState extends State<MyApp> {
+  final todos = [];
+
+  int get total {
     return todos.length;
   }
 
-  getCompleto() {
-    final total = getTotal();
+  int get porcentagemCompleto {
     final completo = todos.where((element) => element.done).length;
+    if (total == 0) {
+      return 0;
+    }
     return (completo / total * 100).round();
   }
+
+  final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +36,37 @@ class MyApp extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Text("Total: ${getTotal()}"),
-            Text("Completo: ${getCompleto()}%"),
+            Text("Total: $total"),
+            Text("Completo: $porcentagemCompleto%"),
+            Divider(),
+            TextField(
+              controller: controller,
+            ),
+            Divider(),
+            Expanded(
+                child: ListView.builder(
+                    itemCount: todos.length,
+                    itemBuilder: (context, index) {
+                      final todo = todos[index];
+
+                      return Dismissible(
+                          key: Key("$todo$index"),
+                          background: Container(color: Colors.red),
+                          onDismissed: (direction) => setState(() {
+                                todos.removeAt(index);
+                              }),
+                          child: TodoItem(todo: todo));
+                    }))
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              todos.add(Todo(description: controller.text));
+              controller.clear();
+            });
+          },
+          child: const Icon(Icons.add),
         ),
       ),
     );

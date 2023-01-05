@@ -1,6 +1,6 @@
 class Todo {
   final String description;
-  final bool done;
+  bool done;
 
   Todo({required this.description, this.done = false});
 

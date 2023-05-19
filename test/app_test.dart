@@ -12,6 +12,13 @@ import 'package:todo_with_tdd/my_app.dart';
 import 'package:todo_with_tdd/todo_item.dart';
 
 void main() {
+  testWidgets('Deve testar a todo list vazia', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    expect(find.text('Completo: 0%'), findsOneWidget);
+    expect(find.text('Total: 0'), findsOneWidget);
+  });
+
   testWidgets('Deve testar a todo list', (WidgetTester tester) async {
     await tester.pumpWidget(MyApp());
     await tester.enterText(find.byType(TextField), 'A');
@@ -62,5 +69,26 @@ void main() {
 
     expect(find.text('Completo: 0%'), findsOneWidget);
     expect(find.text('Total: 1'), findsOneWidget);
+  });
+
+  testWidgets('Não deve deixar inserir todo duplicado',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    await tester.enterText(find.byType(TextField), 'A');
+
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pump();
+
+    expect(find.text('Total: 1'), findsOneWidget);
+    expect(find.text('Completo: 0%'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), 'A');
+
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pump();
+
+    expect(find.text('Total: 1'), findsOneWidget);
+    expect(find.text('Completo: 0%'), findsOneWidget);
   });
 }

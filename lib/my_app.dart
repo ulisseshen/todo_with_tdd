@@ -10,7 +10,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final List<Todo> todos = [];
 
   int get total {
@@ -25,57 +25,69 @@ class _MyAppState extends State<MyApp> {
     return (completo / total * 100).round();
   }
 
-  final controller = TextEditingController();
+  final textFieldController = TextEditingController();
+  final key = GlobalKey<ScaffoldMessengerState>();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Tdd Clean Architecture"),
-        ),
-        body: Column(
-          children: [
-            Text("Total: $total"),
-            Text("Completo: $porcentagemCompleto%"),
-            Divider(),
-            TextField(
-              controller: controller,
-            ),
-            Divider(),
-            Expanded(
-                child: ListView.builder(
-                    itemCount: todos.length,
-                    itemBuilder: (context, index) {
-                      final todo = todos[index];
+      home: ScaffoldMessenger(
+        key: key,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("Tdd Clean Architecture"),
+          ),
+          body: Column(
+            children: [
+              Text("Total: $total"),
+              Text("Completo: $porcentagemCompleto%"),
+              Divider(),
+              TextField(
+                controller: textFieldController,
+              ),
+              Divider(),
+              Expanded(
+                  child: ListView.builder(
+                      itemCount: todos.length,
+                      itemBuilder: (context, index) {
+                        final todo = todos[index];
 
-                      return Dismissible(
-                          key: Key("$todo$index"),
-                          background: Container(color: Colors.red),
-                          onDismissed: (direction) => setState(() {
-                                todos.removeAt(index);
-                              }),
-                          child: TodoItem(
-                            todo: todo,
-                            onToggle: () {
-                              setState(() {
-                                todos[index].done = !todos[index].done;
-                              });
-                            },
-                          ));
-                    }))
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              todos.add(Todo(description: controller.text));
-              controller.clear();
-            });
-          },
-          child: const Icon(Icons.add),
+                        return Dismissible(
+                            key: Key("$todo$index"),
+                            background: Container(color: Colors.red),
+                            onDismissed: (direction) => setState(() {
+                                  todos.removeAt(index);
+                                }),
+                            child: TodoItem(
+                              todo: todo,
+                              onToggle: () {
+                                setState(() {
+                                  todos[index].done = !todos[index].done;
+                                });
+                              },
+                            ));
+                      }))
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: _onClickAddTodo,
+            child: const Icon(Icons.add),
+          ),
         ),
       ),
     );
+  }
+
+  void _onClickAddTodo() {
+    final descritpion = textFieldController.text;
+    final alreadyAdded =
+        todos.any((element) => element.description == descritpion);
+    if (alreadyAdded) {
+      return;
+    }
+    setState(() {
+      todos.add(Todo(description: descritpion));
+      textFieldController.clear();
+    });
   }
 }

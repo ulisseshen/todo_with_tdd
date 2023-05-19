@@ -5,7 +5,7 @@ import 'package:todo_with_tdd/my_app.dart';
 import 'package:todo_with_tdd/todo_item.dart';
 
 class Durations {
-  static Duration fast = const Duration(milliseconds: 400);
+  static Future fast() => Future.delayed(const Duration(milliseconds: 400));
   static Duration medium = const Duration(milliseconds: 1200);
   static Duration slow = const Duration(milliseconds: 2000);
 }
@@ -26,7 +26,7 @@ void main() {
       await tester.pump();
 
       // Expect to find the item on screen.
-      await Future.delayed(Durations.fast);
+      await Durations.fast();
       expect(find.text('A'), findsOneWidget);
       final totalFinder = find.text('Total: 1');
       final completoFinder = find.text('Completo: 0%');

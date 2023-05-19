@@ -1,16 +1,13 @@
 # todo_with_tdd
 
-A new Flutter project.
+Um aplicativo todo com tdd, seguindo como base o vídeo do Rodrigo Bramas com o canal FullCycle
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Articles about tests
+https://semaphoreci.com/blog/automated-testing-flutter2
+https://medium.com/flutter-community/flutter-screenshot-testing-as-a-solid-ui-regression-tool-630221a621e4
+https://betterprogramming.pub/flutter-unit-testing-the-beginners-guide-35105164722e
+https://www.toptal.com/flutter/unit-testing-flutter
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Packages for testings
+https://pub.dev/packages/golden_toolkit
